@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        h1 {
+            font-size: 3em;
+        }
+        #timer, #bestReact, #slowestReact {
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+        #allTimer {
+            display: grid;
+            grid-template-columns: auto auto auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test your reactions</h1>
+    <p style="font-size: 20px;">Click on the boxes and circles as quick as you can!</p>
+    <div id="allTimer">
+        <p id="timer">Your timer:</p>
+        <p id="bestReact">Your Best Timer:</p>
+        <p id="slowestReact">Your Worst Timer:</p>
+    </div>
+    <div id="game" style="position: relative;"></div>
+    <script>
+        let startTimer = new Date().getTime();
+        let bestTime = new Date().getTime();
+        let worstTime = 0;
+
+        function colorRandom() {
+            let color = "#";
+            const colorKey = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", 
+                                "b", "c", "d", "e", "f"];
+            for(let i = 0; i < 6; i++){
+                color += colorKey[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        function shapeRandomAppear() {
+            let top = Math.random() * 400;
+            let left = Math.random() * 1000;
+            let right = Math.random() * 1000;
+            let width = (Math.random() * 200) + 100;
+
+            if (Math.random() > 0.25 && Math.random() >= 0.5) {
+                document.getElementById("game").style.borderRadius = "50%";
+            } else if (Math.random() > 0.5) {
+                document.getElementById("game").style.borderStyle = "solid";
+                document.getElementById("game").style.borderWidth = "0 50px 86.6px 50px";
+                document.getElementById("game").style.borderColor = "transparent transparent orange transparent";
+            } else {
+                document.getElementById("game").style.borderRadius = "0%";
+            }
+
+            document.getElementById("game").style.backgroundColor = colorRandom();
+            document.getElementById("game").style.width = width + "px";
+            document.getElementById("game").style.height = width + "px";
+            document.getElementById("game").style.top = top + "px";
+            document.getElementById("game").style.left = left + "px";
+            document.getElementById("game").style.right = right + "px";
+            document.getElementById("game").style.display = "block";
+            startTimer = new Date().getTime();
+        }
+
+        function shapeAppearAgain() {
+            setTimeout(shapeRandomAppear, Math.random() + 1000);
+        }
+
+        shapeAppearAgain();
+
+        document.getElementById("game").onclick = function() {
+            document.getElementById("game").style.display = "none";
+            let endTimer = new Date().getTime();
+            let timeDif = (endTimer - startTimer) / 1000;
+            document.getElementById("timer").innerHTML = "Your timer: " + timeDif + "s";
+            if(timeDif < bestTime){
+                bestTime = timeDif;
+                document.getElementById("bestReact").innerHTML = "Your Best Timer: " + bestTime + "s"
+            }
+            if(timeDif > worstTime){
+                worstTime = timeDif;
+                document.getElementById("slowestReact").innerHTML = "Your Worst Timer: " + worstTime + "s"
+            }
+            shapeAppearAgain();
+        }
+    </script>
+</body>
+</html>
